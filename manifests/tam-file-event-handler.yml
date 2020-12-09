@@ -33,5 +33,5 @@ spec:
             - name: AMQP_VHOST
               value: "tam"
             - name: RESULT_API
-              value: "http://svc-tam-result-api"
+              value: "http://svc-tam-result-api/filewatcher"
 
