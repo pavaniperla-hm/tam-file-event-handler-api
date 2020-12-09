@@ -1,0 +1,47 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: deploy-tam-file-event-handler
+  namespace: #{namespace}#
+  labels:
+    app: deploy-tam-file-event-handler
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deploy-tam-file-event-handler
+  template:
+    metadata:
+      labels:
+        app: deploy-tam-file-event-handler
+    spec:
+      containers:
+        - name: ctr-tam-file-event-handler
+          image: bitsregistry.azurecr.io/tam-file-event-handler:#{tag}#
+          imagePullPolicy: Always
+          env:
+            - name: AMQP_HOST
+              value: "amqp"
+            - name: AMQP_PORT
+              value: "5672"
+            - name: AMQP_USER
+              value: "amqp-tam"
+            - name: AMQP_PWD
+              value: akvs-amqp-tam-pw@azurekeyvault
+            - name: AMQP_QUEUE
+              value: "files"
+            - name: AMQP_VHOST
+              value: "tam"
+            - name: RESULT_API
+              value: "http://svc-tam-result-api"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+    name: svc-tam-file-event-handler
+    namespace: #{namespace}#
+spec:
+    selector:
+        app: deploy-tam-file-event-handler
