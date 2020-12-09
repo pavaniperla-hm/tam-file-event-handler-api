@@ -35,13 +35,3 @@ spec:
             - name: RESULT_API
               value: "http://svc-tam-result-api"
 
----
-
-apiVersion: v1
-kind: Service
-metadata:
-    name: svc-tam-file-event-handler
-    namespace: #{namespace}#
-spec:
-    selector:
-        app: deploy-tam-file-event-handler
