@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: AMQP_HOST
-              value: "amqp"
+              value: "amqp.rabbitmq-system"
             - name: AMQP_PORT
               value: "5672"
             - name: AMQP_USER
