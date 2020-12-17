@@ -64,6 +64,8 @@ stages:
         tokenSuffix: '}#'
     - upload: manifests
       artifact: manifests
+    - task: WhiteSource@20
+      displayName: WhiteSource
 
 - stage: Deploy
   displayName: Deploy stage
