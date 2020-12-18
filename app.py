@@ -66,12 +66,12 @@ def post_msg(body):
     data = json.loads(body)
 
     post_data = {
-        "integration": data.get("integration", ""),
+        "add_date": data.get("date", ""),
         "filename": data.get("file", ""),
-        "path": data.get("path", ""),
-        "environment": data.get("environment", ""),
+        "integration": data.get("integration", ""),
         "share": data.get("share", ""),
-        "add_date": data.get("date", "")
+        "host": data.get("host", ""),
+        "environment": data.get("environment", ""),
     }
 
     try:
