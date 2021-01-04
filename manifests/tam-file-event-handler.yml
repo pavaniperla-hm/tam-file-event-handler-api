@@ -35,3 +35,14 @@ spec:
             - name: RESULT_API
               value: "http://svc-tam-result-api/filewatcher"
 
+---
+
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: pdb-tam-file-event-handler
+spec:
+  minAvailable: "50%"
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: deploy-tam-file-event-handler
