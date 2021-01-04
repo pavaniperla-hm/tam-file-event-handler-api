@@ -45,4 +45,4 @@ spec:
   minAvailable: "50%"
   selector:
     matchLabels:
-      app.kubernetes.io/name: deploy-tam-file-event-handler
+      app: deploy-tam-file-event-handler
