@@ -45,15 +45,15 @@ if os.environ.get("RESULT_API", False):
     RESULT_API = os.environ["RESULT_API"]
 
 # Add Authentication=ActiveDirectoryPassword to use active directory user instead.
-conn_string = (
-    f"amqp://{user}:{quote(pwd)}@{host}:{port}/{vhost}"
-)
+conn_string = f"amqp://{user}:{quote(pwd)}@{host}:{port}/{vhost}"
 
 
 params = pika.URLParameters(conn_string)
 connection = pika.BlockingConnection(params)
-channel = connection.channel()                  # start a channel
-channel.queue_declare(queue=f'{queue}', durable=True)            # Declare a queue
+channel = connection.channel()  # start a channel
+channel.queue_declare(
+    queue=f"{queue}", durable=True, arguments={"x-queue-type": "quorum"}
+)  # Declare a queue
 
 
 @retry(tries=3, delay=2, logger=logging.getLogger())
@@ -75,7 +75,7 @@ def post_msg(body):
     }
 
     try:
-        r = requests.post(url=url, json=post_data)   # auth=auth?
+        r = requests.post(url=url, json=post_data)  # auth=auth?
         r.raise_for_status()
     except requests.HTTPError as http_err:
         raise Exception(f"Error posting to RESULT_API: HTTP error {http_err}")
@@ -92,7 +92,7 @@ def on_message(current_channel, method_frame, header_frame, body):
 
 
 # set up subscription on the queue
-channel.basic_consume(f'{queue}', on_message)
+channel.basic_consume(f"{queue}", on_message)
 
 # start consuming (blocks)
 channel.start_consuming()
