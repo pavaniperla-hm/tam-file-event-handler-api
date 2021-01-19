@@ -30,14 +30,19 @@ if not pwd:
     print("No AMQP password specified.")
     exit(1)
 
-queue = os.environ.get("AMQP_QUEUE", False)
-if not queue:
-    print("No AMQP queue specified.")
-    exit(1)
-
 vhost = os.environ.get("AMQP_VHOST", False)
 if not vhost:
     print("No AMQP_VHOST specified.")
+    exit(1)
+
+exchange = os.environ.get("AMQP_EXCHANGE", False)
+if not exchange:
+    print("No AMQP exchange specified.")
+    exit(1)
+
+queue = os.environ.get("AMQP_QUEUE", False)
+if not queue:
+    print("No AMQP queue specified.")
     exit(1)
 
 RESULT_API = "http://svc-tam-result-api"
@@ -51,9 +56,12 @@ conn_string = f"amqp://{user}:{quote(pwd)}@{host}:{port}/{vhost}"
 params = pika.URLParameters(conn_string)
 connection = pika.BlockingConnection(params)
 channel = connection.channel()  # start a channel
+
+channel.exchange_declare(exchange=exchange, exchange_type="fanout", durable=True)
 channel.queue_declare(
-    queue=f"{queue}", durable=True, arguments={"x-queue-type": "quorum"}
+    queue=queue, durable=True, arguments={"x-queue-type": "quorum"}
 )  # Declare a queue
+channel.queue_bind(exchange=exchange, queue=queue)
 
 
 @retry(tries=3, delay=2, logger=logging.getLogger())
@@ -72,6 +80,8 @@ def post_msg(body):
         "share": data.get("share", ""),
         "host": data.get("host", ""),
         "environment": data.get("environment", ""),
+        "platform": data.get("platform", ""),
+        "is_source": data.get("is_source", False),
     }
 
     try:
@@ -92,7 +102,7 @@ def on_message(current_channel, method_frame, header_frame, body):
 
 
 # set up subscription on the queue
-channel.basic_consume(f"{queue}", on_message)
+channel.basic_consume(queue, on_message)
 
 # start consuming (blocks)
 channel.start_consuming()

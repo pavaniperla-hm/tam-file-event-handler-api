@@ -28,8 +28,10 @@ spec:
               value: "amqp-tam"
             - name: AMQP_PWD
               value: akvs-amqp-tam-pw@azurekeyvault
-            - name: AMQP_QUEUE
+            - name: AMQP_EXCHANGE
               value: "files"
+            - name: AMQP_QUEUE
+              value: "files_api"
             - name: AMQP_VHOST
               value: "tam"
             - name: RESULT_API
