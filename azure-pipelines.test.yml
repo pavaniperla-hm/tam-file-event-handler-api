@@ -20,7 +20,7 @@ variables:
   - name: debug
     value: true
   - name: imageRepository
-    value: 'tam-file-event-handler'
+    value: 'tam-file-event-handler-api'
   - name: dockerfilePath
     value: '**/Dockerfile'
   - name: tag
