@@ -1,23 +1,23 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: deploy-tam-file-event-handler
+  name: deploy-tam-file-event-handler-api
   namespace: #{namespace}#
   labels:
-    app: deploy-tam-file-event-handler
+    app: deploy-tam-file-event-handler-api
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: deploy-tam-file-event-handler
+      app: deploy-tam-file-event-handler-api
   template:
     metadata:
       labels:
-        app: deploy-tam-file-event-handler
+        app: deploy-tam-file-event-handler-api
     spec:
       containers:
-        - name: ctr-tam-file-event-handler
-          image: bitsregistry.azurecr.io/tam-file-event-handler:#{tag}#
+        - name: ctr-tam-file-event-handler-api
+          image: bitsregistry.azurecr.io/tam-file-event-handler-api:#{tag}#
           imagePullPolicy: Always
           env:
             - name: AMQP_HOST
@@ -42,9 +42,9 @@ spec:
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: pdb-tam-file-event-handler
+  name: pdb-tam-file-event-handler-api
 spec:
   minAvailable: "50%"
   selector:
     matchLabels:
-      app: deploy-tam-file-event-handler
+      app: deploy-tam-file-event-handler-api
