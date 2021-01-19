@@ -81,7 +81,7 @@ def post_msg(body):
         "host": data.get("host", ""),
         "environment": data.get("environment", ""),
         "platform": data.get("platform", ""),
-        "is_source": data.get("is_source", False),
+        "is_source": "1" if data.get("is_source") else "0",
     }
 
     try:
