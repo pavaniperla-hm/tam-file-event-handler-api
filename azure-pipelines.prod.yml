@@ -1,6 +1,6 @@
 trigger: none
 
-name: 0.1.14
+name: 0.1.19
 
 resources:
 - repo: self
